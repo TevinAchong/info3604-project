@@ -194,7 +194,7 @@ def json_to_obj(filename):
 def save_data(data):
     """Converts data to JSON.
     """
-    with open('profile_posts_data2.json', 'w') as json_file:
+    with open('cnc3.json', 'w') as json_file:
         json.dump(data, json_file, indent=4)
 
 
@@ -212,7 +212,7 @@ if __name__ == "__main__":
 
     posts_data = None
     for profile_url in profiles_urls:
-        posts_data = crawl_profile(session, base_url, profile_url, 25)
+        posts_data = crawl_profile(session, base_url, profile_url, 50)
     logging.info('[!] Scraping finished. Total: {}'.format(len(posts_data)))
     logging.info('[!] Saving.')
     save_data(posts_data)
