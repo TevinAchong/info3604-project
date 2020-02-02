@@ -19,19 +19,20 @@ terms = "Funny  OR sad OR nice OR boujee OR fleek OR grimey OR sick OR wonderful
 
 print("Fetching tweets...")
 
-#text_file = open("tweets.txt", "w", encoding="utf-8")
-workbook = xlsxwriter.Workbook("tweets.xlsx")
-worksheet = workbook.add_worksheet()
+text_file = open("tweets.txt", "w", encoding="utf-8")
+#workbook = xlsxwriter.Workbook("tweets.xlsx")
+#worksheet = workbook.add_worksheet()
 
 places = api.geo_search(query="Trinidad and Tobago", granularity="country")
 place_id = places[0].id
 
 row = 0
 col = 0
-for tweet in tweepy.Cursor(api.search, lang="en", geocode="10.4576,-61.2414,90km", q="place:%s " % place_id).items(1200):
-    worksheet.write(row,col, str(tweet.text))
-    row += 1
-#text_file.close()
-workbook.close()
+for tweet in tweepy.Cursor(api.search, lang="en", geocode="10.4576,-61.2414,90km", q="place:%s " % place_id, tweet_mode="extended").items(12):
+    #worksheet.write(row,col, str(tweet.full_text))
+    #row += 1
+    text_file.write(tweet.full_text + "\n")
+text_file.close()
+#workbook.close()
 
 print("Done!\n", "Saved in tweets.txt")
