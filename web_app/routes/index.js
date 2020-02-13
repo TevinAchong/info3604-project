@@ -1,17 +1,3 @@
-// reviews = [
-//     {
-//     "id": 1,
-//     "class": 1,
-//     "text": "This is the absolute greatest movie ever, I love it!",
-//     "trini": ""
-//     },
-//     {
-//         "id": 2,
-//         "class": 0,
-//         "text": "This is the absolute worst movie ever. I hate it!",
-//         "trini": ""
-//     }
-// ];
 
 var firebase = require('firebase');
 // Your web app's Firebase configuration
@@ -28,7 +14,6 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
-db.settings({timestampsInSnapshots:true});
 
 // Pull reviews from firebase and store them in reviews array
 var reviews = [];
