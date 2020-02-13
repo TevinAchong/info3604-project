@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "firebase": "^7.8.1"
   },
   "dependencies": {
     "ejs": "^3.0.1"
