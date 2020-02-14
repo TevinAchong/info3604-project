@@ -10,10 +10,14 @@ var firebaseConfig = {
     messagingSenderId: "320036326310",
     appId: "1:320036326310:web:ae1cb4e32a6d53713c1d67"
 };
-  // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
+// Initialize Firebase
+//firebase.initializeApp(firebaseConfig);
+//const db = firebase.firestore();
+
+var app = firebase.initializeApp(firebaseConfig);
+db = firebase.firestore(app);
+
 
 // Pull reviews from firebase and store them in reviews array
 var reviews = [];
@@ -23,6 +27,19 @@ db.collection('reviews').onSnapshot(snapshot => {
         reviews.push(change.doc.data());
     });
 });
+
+// db.collection("reviews").where("translated", "==", false)
+//     .get()
+//     .then(function(querySnapshot) {
+//         querySnapshot.forEach(function(doc) {
+//             reviews.push(doc.data());
+//             console.log(doc.id, " => ", doc.data());
+//         });
+//     })
+//     .catch(function(error) {
+//         console.log("Error getting documents: ", error);
+// });
+
 
 exports.home = (req, res) => {
     res.render('home', {
@@ -36,3 +53,10 @@ exports.notFound = (req, res) => {
         title: '404 - Page Not Found'
     });
 };
+
+// function getText(){
+//     var trini_text = document.getElementById("trini_translation").nodeValue;
+//     var untranslated_text = document.getElementById("untranslated_text").nodeValue;
+//     console.log(trini_text);
+//     db.collection("reviews").doc(untranslated_text).update({"trini_translation":trini_text});
+// }

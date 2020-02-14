@@ -14,7 +14,7 @@
             <div class="card black center">
                 <div class="card-content white-text">
                 <span class="card-title">Positive Review</span>
-                <p><%=reviews[800].review%></p>
+                <p id="untranslated_text"><%=reviews[800].review%></p>
                 </div>
                 <div class="card-action">
                 <a class="waves-effect waves-light btn red" href="#"><i class="material-icons left">autorenew</i>Get A Different Review</a>
@@ -31,7 +31,7 @@
                     <label for="trini_translation">Trini Translation</label>
                 </div>
                 <div class="center-align col s12">
-                    <button class="btn green white-text">Submit
+                    <button onclick=getText() class="btn green white-text">Submit
                         <i class="material-icons right">send</i>
                     </button>
                 </div>
