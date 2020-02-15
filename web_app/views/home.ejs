@@ -15,7 +15,8 @@
                 <div class="card-content white-text">
                 <span class="card-title">Positive Review</span>
                 <% if(reviews != null){ %>
-                    <p id="untranslated_text"><%= reviews[0].review %></p>
+                    <p id="review_id"><%= reviews[0].id%></p>
+                    <p id="untranslated_text"><%= reviews[0].data().review %></p>
                 <% } %>
                 </div>
                 <div class="card-action">
@@ -26,19 +27,17 @@
     </div>
 
     <div class="row">
-        <form method="POST" class="col s12">
-            <div class="row">
-                <div class="input-field col s12">
-                    <textarea id="trini_translation" class="materialize-textarea"></textarea>
-                    <label for="trini_translation">Trini Translation</label>
-                </div>
-                <div class="center-align col s12">
-                    <button onclick="getText()" class="btn green white-text">Submit
-                        <i class="material-icons right">send</i>
-                    </button>
-                </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea id="trini_translation" class="materialize-textarea"></textarea>
+                <label for="trini_translation">Trini Translation</label>
             </div>
-        </form>
+            <div class="center-align col s12">
+                <button onclick="getText()" class="btn green white-text">Submit
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </div>
     </div>
     
     <script src="js/home.js"></script>

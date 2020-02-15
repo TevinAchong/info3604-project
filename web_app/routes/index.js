@@ -1,4 +1,3 @@
-
 var firebase = require('firebase');
 // Your web app's Firebase configuration
 var firebaseConfig = {
@@ -15,8 +14,8 @@ var firebaseConfig = {
 //firebase.initializeApp(firebaseConfig);
 //const db = firebase.firestore();
 
-var app = firebase.initializeApp(firebaseConfig);
-db = firebase.firestore(app);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+db = firebase.firestore(firebaseApp);
 
 
 // Pull reviews from firebase and store them in reviews array
@@ -26,7 +25,7 @@ db.collection("reviews").where("translated", "==", false).limit(1)
     .get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-            reviews.push(doc.data());
+            reviews.push(doc);
             console.log(doc.id, " => ", doc.data());
         });
     })
@@ -34,6 +33,7 @@ db.collection("reviews").where("translated", "==", false).limit(1)
         console.log("Error getting documents: ", error);
 });
 
+exports.db = db;
 
 exports.home = (req, res) => {
     res.render('home', {
@@ -48,9 +48,3 @@ exports.notFound = (req, res) => {
     });
 };
 
-function getText(){
-    var trini_text = document.getElementById("trini_translation").nodeValue;
-    var untranslated_text = document.getElementById("untranslated_text").nodeValue;
-    console.log(trini_text);
-    db.collection("reviews").doc(untranslated_text).update({"trini_translation":trini_text, "translated": true});
-}
