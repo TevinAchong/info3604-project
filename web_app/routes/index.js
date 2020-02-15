@@ -21,24 +21,18 @@ db = firebase.firestore(app);
 
 // Pull reviews from firebase and store them in reviews array
 var reviews = [];
-db.collection('reviews').onSnapshot(snapshot => {
-    let changes = snapshot.docChanges();
-    changes.forEach(change => {
-        reviews.push(change.doc.data());
-    });
-});
 
-// db.collection("reviews").where("translated", "==", false)
-//     .get()
-//     .then(function(querySnapshot) {
-//         querySnapshot.forEach(function(doc) {
-//             reviews.push(doc.data());
-//             console.log(doc.id, " => ", doc.data());
-//         });
-//     })
-//     .catch(function(error) {
-//         console.log("Error getting documents: ", error);
-// });
+db.collection("reviews").where("translated", "==", false).limit(1)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            reviews.push(doc.data());
+            console.log(doc.id, " => ", doc.data());
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+});
 
 
 exports.home = (req, res) => {
@@ -54,9 +48,9 @@ exports.notFound = (req, res) => {
     });
 };
 
-// function getText(){
-//     var trini_text = document.getElementById("trini_translation").nodeValue;
-//     var untranslated_text = document.getElementById("untranslated_text").nodeValue;
-//     console.log(trini_text);
-//     db.collection("reviews").doc(untranslated_text).update({"trini_translation":trini_text});
-// }
+function getText(){
+    var trini_text = document.getElementById("trini_translation").nodeValue;
+    var untranslated_text = document.getElementById("untranslated_text").nodeValue;
+    console.log(trini_text);
+    db.collection("reviews").doc(untranslated_text).update({"trini_translation":trini_text, "translated": true});
+}
