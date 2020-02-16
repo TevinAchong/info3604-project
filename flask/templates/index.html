@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+
+{% block head %} 
+
+{% endblock %}
+
+{% block body %}
+<div class="card-panel grey darken-4">
+    <span class="white-text"> {{ test[0][1] }}</span><br><br>
+    <div class="row">
+        <form action="{{ url_for('refresh') }}">
+        <button class="btn waves-effect waves-light" type="submit">Get new review
+          </button>    
+        </form>
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <form class= "col s12" action="{{ url_for('update') }}" method="POST">
+        <div class="content-container">
+            <div class="input-field col s12"></div>
+                <label for="id">Review ID:</label><br>
+                <input type="text" name="rowid" value="{{ test[0][0] }}" readonly><br>
+                <label for="trini_translation">Trini Translation:</label><br>
+                <textarea name= "trini" id="trini_translation" class="materialize-textarea"></textarea>
+                <br><br>
+                <button class="btn waves-effect waves-light" type="submit">Submit Translation
+                </button>
+            </div> 
+        </div>
+    </form>
+</div>
+
+
+<div class="row">
+    <div class="col s12 m5">
+      <div class="card-panel white">
+        <span class="black-text">Number of reviews translated: {{ count[0][0] }}</span>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
