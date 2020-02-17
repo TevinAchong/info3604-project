@@ -11,34 +11,17 @@ var firebaseConfig = {
 };
 
 // Initialize Firebase
-//firebase.initializeApp(firebaseConfig);
-//const db = firebase.firestore();
-
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 db = firebase.firestore(firebaseApp);
 
 
-// Pull reviews from firebase and store them in reviews array
-var reviews = [];
-
-db.collection("reviews").where("translated", "==", false).limit(1)
-    .get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-            reviews.push(doc);
-            console.log(doc.id, " => ", doc.data());
-        });
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-});
-
 exports.db = db;
+
 
 exports.home = (req, res) => {
     res.render('home', {
         title: 'Home Page',
-        reviews: reviews
+        //reviews: reviews
     });
 };
 
