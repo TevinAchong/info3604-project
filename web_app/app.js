@@ -21,20 +21,25 @@ const db = routes.db;
 app.get('/', routes.home);
 //app.get('*', routes.notFound);
 app.get('/review', function(req, res) {
-    db.collection("reviews").where("translated", "==", false).limit(1)
+    //console.log("here2");
+    var review_arr = [];
+    db.collection("reviews").where("translated", "==", false).limit(10)
     .get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-          console.log(doc.id, " => ", doc.data());
-            //res.sendStatus(200);
-            res.json({"review": doc.data().review,
-                      "sentiment": doc.data().sentiment,
-                    "id":doc.id});
+        console.log(doc.id, " => ", doc.data());
+        review_arr.push({"review": doc.data().review,
+          "sentiment": doc.data().sentiment,
+        "id":doc.id});
         });
+        var rand_num = Math.floor(Math.random() * Math.floor(review_arr.length));
+        res.json(review_arr[rand_num]);
     })
+
     .catch(function(error) {
         console.log("Error getting documents: ", error);
   });
+
   })
 
 

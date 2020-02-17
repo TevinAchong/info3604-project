@@ -8,7 +8,6 @@ function loadNewReview(){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log("here1");
            var json_obj = JSON.parse(this.responseText);
            console.log(JSON.stringify(json_obj));
            document.getElementById("untranslated_text").innerHTML = json_obj.review;
@@ -34,6 +33,10 @@ function getText(){
         }
     ;
 
+    if (document.getElementById("trini_translation")==''){
+        alert("Field empty..");
+    }
+    
     document.getElementById("trini_translation").value = '';
     document.getElementById("review_type").value = '';
     document.getElementById("untranslated_text").value = '';
