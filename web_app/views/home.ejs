@@ -8,20 +8,19 @@
     <%- include ('partials/materialize.ejs') %>
     <title><%=title%></title>
 </head>
-<body>
+<body onload="loadNewReview()">
     <div class="row">
         <div class="col s12">
             <div class="card black center">
                 <div class="card-content white-text">
-                <span class="card-title">Positive Review</span>
-                <% if(reviews != null){ %>
-                    <p id="review_id"><%= reviews[0].id%></p>
-                    <p id="untranslated_text"><%= reviews[0].data().review %></p>
-                <% } %>
+                            <span id="review_type" class="card-title"></span>
+                            <p>Review ID:</p><p id="review_id" style="font-size:13px"></p>
+                            <p>=========================================================================</p>
+                    <p id="untranslated_text"></p>
                 </div>
-                <div class="card-action">
+                <!-- <div class="card-action">
                 <a class="waves-effect waves-light btn red" href="#"><i class="material-icons left">autorenew</i>Get A Different Review</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
