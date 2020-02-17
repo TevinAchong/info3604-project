@@ -2,6 +2,7 @@
 import firebase_admin
 import google.cloud
 from firebase_admin import credentials, firestore
+from itertools import islice
 import csv
 
 cred = credentials.Certificate("final-project-data-collection-firebase-adminsdk-5y7ve-63cb93e768.json")
@@ -12,7 +13,7 @@ doc_ref = store.collection(u'reviews')
 
 with open('data.csv', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
-    for row in reader:
+    for row in islice(reader,1,1000):
         if (row['sentiment'] == 'positive'):
             doc_ref.add({u'review':row['review'], 'sentiment':1, u'translated':False, u'trini_translation':u''})
         else:
