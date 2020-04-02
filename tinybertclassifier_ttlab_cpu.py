@@ -7,12 +7,17 @@ import torch
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
+import nltk
+nltk.download('stopwords')
 
 
 # Load dataset
 df = pd.read_csv('IMDB_Dataset.csv', skiprows=1, header=None)
 print(df.head())
 df[1] = df[1].map({'positive': 1, 'negative': 0})
+#remove stop words
+stop = stopwords.words('english')
+df[0] = df[0].apply(lambda x: ' '.join([word for word in x.split() if word not in (stop)]))
 print(df.head())
 
 #df=df[:10000]
