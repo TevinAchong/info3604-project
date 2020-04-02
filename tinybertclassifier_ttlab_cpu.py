@@ -23,9 +23,9 @@ print(df.head())
 #df=df[:10000]
 
 # Load tokenizer and tinyBERT
-tokenizer = BertTokenizer.from_pretrained('bert-base-cased', do_lower_case=True)
-config = BertConfig.from_json_file('config_4l.json')
-model = BertModel.from_pretrained('pytorch_model_4l.bin', config=config)
+tokenizer = BertTokenizer.from_pretrained('../bert-base-cased', do_lower_case=True)
+config = BertConfig.from_json_file('../config_4l.json')
+model = BertModel.from_pretrained('../pytorch_model_4l.bin', config=config)
 tokenized = df[0].apply((lambda x: tokenizer.encode(x[0:511], add_special_tokens=True)))
 
 max_len = 0
