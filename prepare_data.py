@@ -5,7 +5,9 @@ from nltk.stem import PorterStemmer
 from sklearn.model_selection import train_test_split
 nltk.download('stopwords')
 from nltk.corpus import stopwords
-import tensorflow.flags as flags
+import tensorflow as tf
+
+flags = tf.flags
 
 FLAGS = flags.FLAGS
 

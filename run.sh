@@ -1,8 +1,52 @@
 #!/usr/bin/env bash
 
+while getopts m:r:s: aflag; do
+    case $aflag in
+            m) model=$OPTARG;;
+            r) remove_stop_words=$OPTARG;;
+            s) stemming=$OPTARG;;
+    esac
+done
+
+#check for output directory
+if [[ ! -d bert_output ]]
+then
+    mkdir bert_output
+fi
+
+#check for virtualenv
+if [[ ! -f venv/bin/activate ]]
+then
+    echo "Making venv"
+    mkdir venv
+    python3 -m venv venv
+    source venv/bin/activate
+    pip3 install -r requirements.txt
+else
+    source venv/bin/activate
+fi
+
 prepare_data () {
-    rm -r *.tsv
-    python prepare_data.py
+    if [[ -f /dataset/*.tsv ]]
+    then
+        rm -r *.tsv
+    fi
+    if  [[ ! -x prepare_data.py ]]
+    then
+        chmod +x prepare_data.py
+    fi
+    if [[ ${remove_stop_words} == "True" ]] && [[ ${stemming} == "True" ]]
+    then
+        ./prepare_data.py remove_stop_words=True stemming=True
+    elif [[ ${remove_stop_words} == "False" ]] && [[ ${stemming} == "True" ]]
+    then
+        ./prepare_data.py remove_stop_words=False stemming=True
+    elif  [[ ${remove_stop_words} == "True" ]] && [[ ${stemming} == "False" ]]
+    then
+        ./prepare_data.py remove_stop_words=True stemming=False
+    else
+        ./prepare_data.py
+    fi
 }
 
 #check if BERT repo is cloned locally, if not download.
@@ -25,8 +69,40 @@ then
     mv data.csv dataset/
 fi
 
-#check for tsv file
-if  [[ ! -f /dataset/train.tsv]] ||  [[ ! -f /dataset/dev.tsv ]] || [[ ! -f test.tsv ]]
+#prepare data
+prepare_data
+
+#check for models directory
+if ! [[ -d models ]]
 then
-    prepare_data
+    mkdir models
 fi
+
+#check for model
+if [[ ${model} == "bert" ]]
+then
+    if [[ ! -d models/bert ]]
+    then
+        echo "Downloading model..."
+        wget -q https://storage.googleapis.com/bert_models/2018_10_18/cased_L-12_H-768_A-12.zip -O cased.zip
+        mkdir models/bert
+        unzip cased.zip -d models/bert/
+        rm -r cased.zip
+        mv models/bert/cased_L-12_H-768_A-12/* models/bert/
+    fi
+elif [[ ${model} == "bert-tiny" ]]
+then
+    if [[ ! -d models/bert-tiny ]]
+    then
+        echo "Downloading model..."
+        wget -q --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=11hAu7t52tKbd8c3ck4t_DlTs_fGy50PG' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=11hAu7t52tKbd8c3ck4t_DlTs_fGy50PG" -O bert-tiny.zip && rm -rf /tmp/cookies.txt
+        mkdir models/bert-tiny
+        unzip bert-tiny.zip -d models/bert-tiny/
+        rm -r bert-tiny.zip
+        mv models/bert-tiny/2nd_General_TinyBERT_4L_312D/* models/bert-tiny/
+    fi
+fi
+
+cd bert
+
+python3 run_classifier.py --task_name=cola --do_train=true --do_eval=true --data_dir=./../dataset --vocab_file=./../models/${model}/vocab.txt --bert_config_file=./../models/${model}/bert_config.json --init_checkpoint=./../models/${model}/bert_model.ckpt --max_seq_length=512 --train_batch_size=2 --learning_rate=2e-5 --num_train_epochs=3.0 --output_dir=./../bert_output/ --do_lower_case=False --save_checkpoints_steps 1000
