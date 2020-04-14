@@ -3,3 +3,4 @@ bert/
 *.log
 *.toc
 *.synctex.gz
+*.out
