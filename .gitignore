@@ -1,1 +1,5 @@
 bert/
+*.aux
+*.log
+*.toc
+*.synctex.gz
