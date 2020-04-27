@@ -90,20 +90,36 @@ then
         unzip cased.zip -d models/bert/
         rm -r cased.zip
         mv models/bert/cased_L-12_H-768_A-12/* models/bert/
+        mv models/bert/bert_config.json models/bert/config.json
+    fi
+elif [[ ${model} == "tiny-bert" ]]
+then
+    if [[ ! -d models/tiny-bert ]]
+    then
+        echo "Downloading model..."
+        wget -q --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=11hAu7t52tKbd8c3ck4t_DlTs_fGy50PG' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=11hAu7t52tKbd8c3ck4t_DlTs_fGy50PG" -O tiny-bert.zip && rm -rf /tmp/cookies.txt
+        mkdir models/tiny-bert
+        unzip tiny-bert.zip -d models/tiny-bert/
+        rm -r tiny-bert.zip
+        mv models/tiny-bert/2nd_General_TinyBERT_4L_312D/* models/tiny-bert/
     fi
 elif [[ ${model} == "bert-tiny" ]]
 then
     if [[ ! -d models/bert-tiny ]]
     then
         echo "Downloading model..."
-        wget -q --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=11hAu7t52tKbd8c3ck4t_DlTs_fGy50PG' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=11hAu7t52tKbd8c3ck4t_DlTs_fGy50PG" -O bert-tiny.zip && rm -rf /tmp/cookies.txt
+        wget -q --no-check-certificate 'https://docs.google.com/uc?export=download&id=1C56uju9E5WholSfK9-jtsS17LX3nJfdL' -O bert-tiny.zip
         mkdir models/bert-tiny
         unzip bert-tiny.zip -d models/bert-tiny/
         rm -r bert-tiny.zip
-        mv models/bert-tiny/2nd_General_TinyBERT_4L_312D/* models/bert-tiny/
-    fi
+        mv models/bert-tiny/bert_config.json models/bert-tiny/config.json
+        fi
 fi
 
 cd bert
 
-python3 run_classifier.py --task_name=cola --do_train=true --do_eval=true --data_dir=./../dataset --vocab_file=./../models/${model}/vocab.txt --bert_config_file=./../models/${model}/bert_config.json --init_checkpoint=./../models/${model}/bert_model.ckpt --max_seq_length=${max_seq_len} --train_batch_size=2 --learning_rate=2e-5 --num_train_epochs=3.0 --output_dir=./../bert_output/ --do_lower_case=False --save_checkpoints_steps 1000
+start=`date +%s`
+python3 run_classifier.py --task_name=cola --do_train=true --do_eval=true --data_dir=./../dataset --vocab_file=./../models/${model}/vocab.txt --bert_config_file=./../models/${model}/config.json --init_checkpoint=./../models/${model}/bert_model.ckpt --max_seq_length=${max_seq_len} --train_batch_size=2 --learning_rate=2e-5 --num_train_epochs=3.0 --output_dir=./../bert_output/ --do_lower_case=False --save_checkpoints_steps 1000
+end=`date +%s`
+runtime=$((end-start))
+echo "$runtime"
