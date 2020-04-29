@@ -118,6 +118,8 @@ fi
 
 cd bert
 
+CUDA_VISIBLE_DEVICES=0
+
 start=`date +%s`
 python3 run_classifier.py --task_name=cola --do_train=true --do_eval=true --data_dir=./../dataset --vocab_file=./../models/${model}/vocab.txt --bert_config_file=./../models/${model}/config.json --init_checkpoint=./../models/${model}/bert_model.ckpt --max_seq_length=${max_seq_len} --train_batch_size=2 --learning_rate=2e-5 --num_train_epochs=3.0 --output_dir=./../bert_output/ --do_lower_case=False --save_checkpoints_steps 1000
 end=`date +%s`
